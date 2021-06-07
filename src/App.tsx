@@ -1,14 +1,13 @@
-import React from 'react'
-import logo from './logo.svg';
+import React from 'react';
 import './index.css';
 import './App.css';
 
-function App() {
+export const App: React.FC = (): JSX.Element => {
+  
+
   return (
     <div>
-      Working on an app
+      <h1>Hello</h1>
     </div>
   );
-}
-
-export default App;
+};

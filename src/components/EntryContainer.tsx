@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../store/store';
 import { EntryType } from '../types/interfaces';
@@ -36,12 +36,12 @@ export const EntryContainer: React.FC = () => {
     const newEntries = [...entries];
     newEntries.splice(source.index, 1);
     newEntries.splice(destination.index, 0, entries[source.index]);
-    
+
     dispatch(onDragEnd(newEntries));
   };
 
   return (
-    <section className='container flex flex-col bg-gray-200'>
+    <section className='container flex flex-col bg-gray-200 rounded'>
       <button
         onClick={() =>
           dispatch(
@@ -49,6 +49,9 @@ export const EntryContainer: React.FC = () => {
               id: new Date().getTime().toString(),
               title: '',
               content: '',
+              progress: 75,
+              link: '',
+              tags: [],
             })
           )
         }
@@ -60,26 +63,37 @@ export const EntryContainer: React.FC = () => {
         <Droppable droppableId='column-1'>
           {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {entries.map((entry: EntryType, index: number) => (
-                <Draggable
-                  key={entry.id}
-                  draggableId={entry.id}
-                  index={index}
-                >
-                  {(
-                    providedDraggable: DraggableProvided,
-                    snapshotDraggable: DraggableStateSnapshot
-                  ) => (
-                    <div
-                      ref={providedDraggable.innerRef}
-                      {...providedDraggable.draggableProps}
-                      {...providedDraggable.dragHandleProps}
-                    >
-                      <Entry key={entry.id} id={entry.id} title={entry.title} />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
+              {entries.map((entry: EntryType, index: number) => {
+                const { id, title, content, tags, progress, link } = entry;
+                return (
+                  <Draggable
+                    key={entry.id}
+                    draggableId={entry.id}
+                    index={index}
+                  >
+                    {(
+                      providedDraggable: DraggableProvided,
+                      snapshotDraggable: DraggableStateSnapshot
+                    ) => (
+                      <div
+                        ref={providedDraggable.innerRef}
+                        {...providedDraggable.draggableProps}
+                        {...providedDraggable.dragHandleProps}
+                      >
+                        <Entry
+                          key={id}
+                          id={id}
+                          title={title}
+                          content={content}
+                          tags={tags}
+                          progress={progress}
+                          link={link}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                );
+              })}
             </div>
           )}
         </Droppable>

@@ -1,6 +1,5 @@
 import { ActionTypes } from '../types/list_action_types';
 import { EntryType } from '../types/interfaces';
-import { DropResult } from 'react-beautiful-dnd';
 
 export const addEntry = (entry: EntryType): ActionTypes => ({
   type: 'ADD_ENTRY',

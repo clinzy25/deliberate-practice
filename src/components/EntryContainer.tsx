@@ -4,7 +4,7 @@ import { AppState } from '../store/store';
 import { EntryType } from '../types/interfaces';
 import { Entry } from './Entry';
 import { addEntry, onDragEnd } from '../actions/list_actions';
-import { EntryArray } from '../reducers/list_reducer';
+import { EntryArray } from '../types/interfaces';
 import {
   DragDropContext,
   DropResult,
@@ -52,6 +52,7 @@ export const EntryContainer: React.FC = () => {
               progress: 75,
               link: '',
               tags: [],
+              modalView: false,
             })
           )
         }
@@ -64,7 +65,7 @@ export const EntryContainer: React.FC = () => {
           {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {entries.map((entry: EntryType, index: number) => {
-                const { id, title, content, tags, progress, link } = entry;
+                const { id, title, content, tags, progress, link, modalView } = entry;
                 return (
                   <Draggable
                     key={entry.id}
@@ -88,6 +89,7 @@ export const EntryContainer: React.FC = () => {
                           tags={tags}
                           progress={progress}
                           link={link}
+                          modalView={modalView}
                         />
                       </div>
                     )}

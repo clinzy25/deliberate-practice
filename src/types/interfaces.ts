@@ -5,8 +5,9 @@ export interface EntryType {
   tags: [];
   progress: number;
   link: string;
+  modalView: boolean;
 }
 
 export interface EntryArray {
-  array: EntryType[];
+  entries: EntryType[];
 }

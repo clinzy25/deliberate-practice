@@ -1,8 +1,11 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { deleteEntry } from '../actions/list_actions';
+import React, { useState } from 'react';
+import { AppState } from '../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteEntry, editTitle, showModal } from '../actions/list_actions';
 import { ProgressBar } from './ProgressBar';
-import { AiOutlineExpandAlt } from 'react-icons/ai';
+import { IoOpenOutline } from 'react-icons/io5';
+import { Modal } from './Modal';
+import { EntryArray } from '../types/interfaces';
 
 interface EntryProps {
   key: string;
@@ -12,20 +15,31 @@ interface EntryProps {
   tags: [];
   progress: number;
   link: string;
+  modalView: boolean;
 }
 
-export const Entry: React.FC<EntryProps> = ({ id, title, progress }) => {
+export const Entry: React.FC<EntryProps> = ({
+  id,
+  title,
+  progress,
+  modalView,
+}) => {
   const dispatch = useDispatch();
-
+  
   return (
     <div className='flex items-center border-t border-gray-600 h-11 hover:bg-gray-100 '>
-      <AiOutlineExpandAlt className='text-2xl cursor-pointer' />
+      <IoOpenOutline
+        className='text-2xl cursor-pointer'
+        onClick={() => dispatch(showModal(id))}
+      />
+      {modalView ? <Modal id={id} /> : null}
       <input
         className='title h-full w-80 focus:outline-none focus:bg-gray-100 bg-gray-200'
         type='text'
+        onChange={(e) => dispatch(editTitle(e.target.value, id))}
         value={title}
       />
-      <div className='tags w-36'>Tags</div>
+      <div className='tags w-36'>Tas</div>
       <div className='link w-36'>Links</div>
       <ProgressBar progress={progress} />
       <button

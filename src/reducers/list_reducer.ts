@@ -1,10 +1,5 @@
-import { EntryType } from '../types/interfaces';
+import { EntryArray } from '../types/interfaces';
 import { ActionTypes } from '../types/list_action_types';
-
-
-export interface EntryArray {
-  entries: EntryType[];
-}
 
 const listDefaultState = {
   entries: [],
@@ -16,7 +11,7 @@ const listReducer = (
 ): EntryArray => {
   switch (action.type) {
     case 'ADD_ENTRY':
-      return { ...state, entries: [...state.entries, action.entry] };
+      return { ...state, entries: [action.entry, ...state.entries] };
     case 'DELETE_ENTRY':
       return {
         ...state,
@@ -26,6 +21,45 @@ const listReducer = (
       return {
         ...state,
         entries: [...action.newEntries],
+      };
+    case 'EDIT_TITLE':
+      const editTitleEntry = state.entries.find(
+        (entry) => entry.id === action.id
+      );
+      if (editTitleEntry) {
+        editTitleEntry.title = action.newTitle;
+      } else {
+        throw new Error('could not find');
+      }
+      return {
+        ...state,
+        entries: [...state.entries],
+      };
+    case 'EDIT_CONTENT':
+      const editContentEntry = state.entries.find(
+        (entry) => entry.id === action.id
+      );
+      if (editContentEntry) {
+        editContentEntry.content = action.newContent;
+      } else {
+        throw new Error('could not find');
+      }
+      return {
+        ...state,
+        entries: [...state.entries],
+      };
+    case 'SHOW_MODAL':
+      const showModalEntry = state.entries.find(
+        (entry) => entry.id === action.id
+      );
+      if (showModalEntry) {
+        showModalEntry.modalView = !showModalEntry.modalView;
+      } else {
+        throw new Error('could not find');
+      }
+      return {
+        ...state,
+        entries: [...state.entries],
       };
     default:
       return state;

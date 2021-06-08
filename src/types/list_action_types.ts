@@ -17,7 +17,7 @@ export interface DeleteEntryAction {
 
 export interface onDragEnd {
   type: typeof ON_DRAG_END;
-  result: DropResult;
+  newEntries: EntryType[];
 }
 
 export type ActionTypes = AddEntryAction | DeleteEntryAction | onDragEnd;

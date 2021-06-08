@@ -7,6 +7,7 @@ import { addEntry, onDragEnd } from '../actions/list_actions';
 import { EntryArray } from '../reducers/list_reducer';
 import {
   DragDropContext,
+  DropResult,
   Droppable,
   Draggable,
   DroppableStateSnapshot,
@@ -21,26 +22,23 @@ export const EntryContainer: React.FC = () => {
   );
   const dispatch = useDispatch();
 
-  // const onDragEnd = (result: DropResult) => {
-  //   const { destination, source, draggableId } = result;
-
-  //   if (!destination) {
-  //     return;
-  //   }
-
-  //   if (
-  //     destination.droppableId === source.droppableId &&
-  //     destination.index === source.index
-  //   ) {
-  //     return;
-  //   }
+  const onDragEndLocal = (result: DropResult) => {
+    const { destination, source } = result;
+    if (!destination) {
+      return;
+    }
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+    const newEntries = [...entries];
+    newEntries.splice(source.index, 1);
+    newEntries.splice(destination.index, 0, entries[source.index]);
     
-  //   const newEntries = Array.from(entries);
-  //   newEntries.splice(source.index, 1);
-  //   newEntries.splice(destination.index, 0, draggableId)
-    
-    
-  // };
+    dispatch(onDragEnd(newEntries));
+  };
 
   return (
     <section className='container flex flex-col bg-gray-200'>
@@ -58,12 +56,16 @@ export const EntryContainer: React.FC = () => {
       >
         Add
       </button>
-      <DragDropContext onDragEnd={() => dispatch(onDragEnd)}>
+      <DragDropContext onDragEnd={onDragEndLocal}>
         <Droppable droppableId='column-1'>
           {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {entries.map((entry: EntryType, index: number) => (
-                <Draggable key={entry.id} draggableId={index.toString()} index={index}>
+                <Draggable
+                  key={entry.id}
+                  draggableId={entry.id}
+                  index={index}
+                >
                   {(
                     providedDraggable: DraggableProvided,
                     snapshotDraggable: DraggableStateSnapshot

@@ -12,8 +12,8 @@ export const deleteEntry = (id: string): ActionTypes => ({
   id,
 });
 
-export const onDragEnd = (result: DropResult): ActionTypes => ({
+export const onDragEnd = (newEntries: EntryType[]): ActionTypes => ({
   type: 'ON_DRAG_END',
-  result,
+  newEntries,
 });
 

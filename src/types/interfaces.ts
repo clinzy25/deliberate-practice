@@ -10,4 +10,5 @@ export interface EntryType {
 
 export interface EntryArray {
   entries: EntryType[];
+  userSignedIn: boolean;
 }

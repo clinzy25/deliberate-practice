@@ -53,3 +53,11 @@ export const showModal = (id: string): ActionTypes => ({
   type: 'SHOW_MODAL',
   id
 });
+
+export const signIn = (): ActionTypes => ({
+  type: 'SIGN_IN',
+});
+
+export const signOut = (): ActionTypes => ({
+  type: 'SIGN_OUT',
+});

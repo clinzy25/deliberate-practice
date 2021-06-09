@@ -9,6 +9,8 @@ export const ADD_TAG = 'ADD_TAG';
 export const ADD_LINK = 'ADD_LINK';
 export const UPDATE_PROGRESS = 'UPDATE_PROGRESS';
 export const SHOW_MODAL = 'SHOW_MODAL';
+export const SIGN_IN = 'SIGN_IN';
+export const SIGN_OUT = 'SIGN_OUT';
 
 export interface AddEntryAction {
   type: typeof ADD_ENTRY;
@@ -60,6 +62,14 @@ export interface showModal {
   id: string;
 }
 
+export interface signIn {
+  type: typeof SIGN_IN;
+}
+
+export interface signOut {
+  type: typeof SIGN_OUT;
+}
+
 export type ActionTypes =
   | AddEntryAction
   | DeleteEntryAction
@@ -69,4 +79,6 @@ export type ActionTypes =
   | addTag
   | addLink
   | updateProgress
-  | showModal;
+  | showModal
+  | signIn
+  | signOut;

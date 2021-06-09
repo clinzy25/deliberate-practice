@@ -3,6 +3,7 @@ import { ActionTypes } from '../types/list_action_types';
 
 const listDefaultState = {
   entries: [],
+  userSignedIn: false,
 };
 
 const listReducer = (
@@ -60,6 +61,16 @@ const listReducer = (
       return {
         ...state,
         entries: [...state.entries],
+      };
+    case 'SIGN_IN':
+      return {
+        ...state,
+        userSignedIn: true,
+      };
+    case 'SIGN_OUT':
+      return {
+        ...state,
+        userSignedIn: false,
       };
     default:
       return state;

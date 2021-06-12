@@ -5,21 +5,35 @@ import './index.css';
 import { AppState } from './store/store';
 import { EntryContainer } from './components/EntryContainer';
 import './App.css';
-import {
-  FirebaseAuthProvider,
-  FirebaseAuthConsumer,
-} from '@react-firebase/auth';
 import 'firebase/auth';
 import firebase from 'firebase/app';
 import app from './firebase/firebase-config';
 import { signIn, signOut } from './actions/list_actions';
 import loadingGif from './assets/preloader.gif';
+import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase';
 
 /** https://react-firebase-js.com/docs/guides/build-a-react-app-with-firebase-auth-and-realtime-database/read-data */
 export const App: React.FC = () => {
-  const userSignedIn = useSelector((state: AppState) => state.userSignedIn);
+  const userSignedIn = useSelector(
+    (state: AppState) => state.list.userSignedIn
+  );
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const auth = useSelector((state: AppState) => state.firebase.auth);
+  const firebase = useFirebase();
+
+  const loginWithGoogle = () => {
+    return firebase.login({ provider: 'google', type: 'popup' });
+  };
+
+  const loginWithEmail = () => {
+    return firebase.login({ email: '', password: ''});
+  };
+
+  const logout = () => {
+    return firebase.logout();
+  };
+
   return (
     <>
       <header className='flex items-center justify-between mx-32 my-8'>
@@ -27,9 +41,19 @@ export const App: React.FC = () => {
           Deliberate Practice
         </h1>
         <div className='auth'>
-          <FirebaseAuthProvider {...app} firebase={firebase}>
-            <FirebaseAuthConsumer>
-              {loading ? (
+          {/* <FirebaseAuthConsumer> */}
+          {!isLoaded(auth) ? (
+            <img src={loadingGif} alt='' />
+          ) : isEmpty(auth) ? (
+            <>
+              <p>Sign in to save data</p>
+              <button onClick={loginWithGoogle}>Sign in with Google</button>
+              <button onClick={loginWithEmail}>Sign in with email</button>
+            </>
+          ) : (
+            <button onClick={logout}>Sign out</button>
+          )}
+          {/* {!isLoaded(auth) ? (
                 <img src={loadingGif} alt='' />
               ) : (
                 ({ firebase }) =>
@@ -47,7 +71,7 @@ export const App: React.FC = () => {
                         Sign out
                       </button>
                     </div>
-                  ) : (
+                  ) : isEmpty(auth) ? (
                     <div>
                       <h2>Youre not signed in </h2>
                       <button
@@ -61,28 +85,30 @@ export const App: React.FC = () => {
                         Sign in anonymously
                       </button>
                       <button
-                        onClick={async () => {
-                          const googleAuthProvider =
-                            new firebase.auth.GoogleAuthProvider();
-                          await firebase
-                            .auth()
-                            .signInWithPopup(googleAuthProvider);
-                          setLoading(true);
-                          dispatch(signIn());
-                          setLoading(false);
-                        }}
+                        onClick={
+                          // const googleAuthProvider =
+                          //   new firebase.auth.GoogleAuthProvider();
+                          // await firebase
+                          //   .auth()
+                          //   .signInWithPopup(googleAuthProvider);
+                          // setLoading(true);
+                          loginWithGoogle
+                          // dispatch(signIn());
+                          // setLoading(false);
+                        }
                       >
                         Sign in with Google
                       </button>
                     </div>
+                  ) : (
+                    <pre>{JSON.stringify(auth, null, 2)}</pre>
                   )
-              )}
-            </FirebaseAuthConsumer>
-          </FirebaseAuthProvider>
+              )} */}
+          {/* </FirebaseAuthConsumer> */}
         </div>
       </header>
       <div className='app-container flex flex-col place-items-center'>
-        <EntryContainer />
+        <EntryContainer userId={auth.uid} />
       </div>
     </>
   );

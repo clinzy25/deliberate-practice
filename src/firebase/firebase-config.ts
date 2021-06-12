@@ -6,6 +6,7 @@ import 'firebase/firestore';
 const app = firebase.initializeApp({
   apiKey: 'AIzaSyBzHd_qVgBajFo962Uu3NkngpwJQIjKuTo',
   authDomain: 'deliberate-practice-4987e.firebaseapp.com',
+  databaseURL: 'https://deliberate-practice-4987e-default-rtdb.firebaseio.com/',
   projectId: 'deliberate-practice-4987e',
   storageBucket: 'deliberate-practice-4987e.appspot.com',
   messagingSenderId: '354081771706',

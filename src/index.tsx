@@ -5,12 +5,29 @@ import { App } from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import firebase from 'firebase/app';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import app from './firebase/firebase-config';
+
+
+const rrfConfig = {
+  userProfile: 'users',
+  // useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
+};
+
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch,
+};
 
 ReactDOM.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <ReactReduxFirebaseProvider {...app} {...rrfProps}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </ReactReduxFirebaseProvider>
   </Provider>,
   document.getElementById('root')
 );
